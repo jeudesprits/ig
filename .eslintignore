@@ -1,0 +1,4 @@
+node_modules
+dist
+php_service
+logs
