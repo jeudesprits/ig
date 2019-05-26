@@ -1,0 +1,48 @@
+{
+  "name": "ig",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run serve",
+    "watch": "nodemon --exec babel-node src/index.js",
+    "serve": "node dist/index.js",
+    "build": "babel src --out-dir dist",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "author": "jeudesprits",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeudesprits/ig.git"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cors": "^2.8.5",
+    "dotenv-safe": "^6.1.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.2.6",
+    "node-cron": "^2.0.3",
+    "winston": "^3.2.1",
+    "winston-callback": "^3.0.4",
+    "winston-telegram": "^2.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-wesbos": "0.0.19",
+    "eslint-plugin-html": "^5.0.5",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.17.1"
+  }
+}
