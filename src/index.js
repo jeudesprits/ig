@@ -1,3 +1,9 @@
-import { logger, secrets } from './util/index';
+import process from 'process';
+import { logger } from './util/index';
+import db from './db/db';
 
-logger.info(secrets);
+(async () => {
+  await db.connect();
+  const col = await db.getCollection('ig_meawira', 'followers_count');
+  console.log(await col.find({}).count());
+})();
