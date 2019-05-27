@@ -1,6 +1,6 @@
 import axios from 'axios';
 import fs from 'fs';
-import { logger } from '../util';
+import { logger } from '../utils';
 import db from '../db';
 
 let isFirstRequest = true;

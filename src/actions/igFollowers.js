@@ -1,6 +1,6 @@
 import axios from 'axios';
 import db from '../db';
-import { logger } from '../util';
+import { logger } from '../utils';
 
 async function getCurrentIGFollowersCount(igName) {
   let response;

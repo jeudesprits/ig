@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import { logger } from '../util';
+import { logger } from '../utils';
 import { igFollowers, tiktokVideos, services } from '../actions';
 
 const timezone = 'Asia/Tashkent';

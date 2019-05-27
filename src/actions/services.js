@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import process from 'process';
-import { logger } from '../util';
+import { logger } from '../utils';
 
 function convertVideoToBoxWithBlur() {
   try {

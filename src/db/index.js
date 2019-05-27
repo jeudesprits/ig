@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import { secrets } from '../util';
+import { secrets } from '../utils';
 
 class DB {
   constructor() {

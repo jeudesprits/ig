@@ -1,4 +1,4 @@
-import { logger, secrets } from './util';
+import { logger, secrets } from './utils';
 import app from './app';
 import './cron';
 
