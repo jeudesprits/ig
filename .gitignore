@@ -61,7 +61,7 @@ typings/
 .next
 
 # Distribution
-dis
+dist
 
 # Temporary
 tmp
