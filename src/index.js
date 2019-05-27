@@ -1,8 +1,6 @@
 import { logger } from './util';
-import db from './db';
+import { igFollowers, tiktokVideos } from './actions';
 
 (async () => {
-  await db.connect();
-  const col = await db.getCollection('ig_meawira', 'followers_count');
-  console.log(await col.find({}).count());
+  console.log(await tiktokVideos.getTikTokVideoInfo());
 })();
