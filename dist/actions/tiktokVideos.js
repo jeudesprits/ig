@@ -1,12 +1,26 @@
-import axios from 'axios';
-import fs from 'fs';
-import { logger } from '../util';
-import db from '../db';
+"use strict";
 
-let isFirstRequest = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
-// eslint-disable-next-line camelcase
-function isTikTokVideoPopular({ comment_count, digg_count }) {
+var _axios = _interopRequireDefault(require("axios"));
+
+var _fs = _interopRequireDefault(require("fs"));
+
+var _util = require("../util");
+
+var _db = _interopRequireDefault(require("../db"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+let isFirstRequest = true; // eslint-disable-next-line camelcase
+
+function isTikTokVideoPopular({
+  comment_count,
+  digg_count
+}) {
   // eslint-disable-next-line camelcase
   return comment_count >= 20 && digg_count >= 10000;
 }
@@ -15,24 +29,23 @@ async function isTikTokVideoUnique(id) {
   let document;
 
   try {
-    await db.connect();
-    const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
-    document = await cl.findOne({ aweme_id: id });
+    await _db.default.connect();
+    const cl = await _db.default.getCollection('ig_meawira', 'tik_tok_video-ids');
+    document = await cl.findOne({
+      aweme_id: id
+    });
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    _util.logger.error(error.message, () => process.exit(1));
   }
 
   return document === null;
 }
 
 function getParams() {
-  const destruction = isFirstRequest
-    ? {
-        min_cursor: '0',
-        is_cold_start: '1',
-      }
-    : {};
-
+  const destruction = isFirstRequest ? {
+    min_cursor: '0',
+    is_cold_start: '1'
+  } : {};
   return {
     version_code: '11.5.0',
     'pass-region': '1',
@@ -80,7 +93,7 @@ function getParams() {
     max_cursor: '0',
     // eslint-disable-next-line prettier/prettier
     bid_ad_params: 'H4sIAAAAAAAAE6vmUlBQSkyJz8xLy48vLcjJT0xRUrBSiAYKKyhUg0mggozUxJTU\n\novikzJSUzLx0sGKIKqiCWB2YyoKcxOTU3NS8kviSyoJUkCIlQwMDQ0NjA0MlsJpa\n\nIBnLVQsARV9EY3gAAAA=',
-    ...destruction,
+    ...destruction
   };
 }
 
@@ -94,7 +107,7 @@ function getHeaders() {
     cookie: 'ttreq=1$d17c23efa2e6ebd18e4347d0555267d3cfd60fbe',
     'x-khronos': `${Date.now()}`,
     'x-pods': '',
-    'x-gorgon': '8300fe5600001dff6f593972679ba95fdbc64b29738e453e6be5',
+    'x-gorgon': '8300fe5600001dff6f593972679ba95fdbc64b29738e453e6be5'
   };
 }
 
@@ -102,20 +115,18 @@ async function getTikTokListOfVideos() {
   let list;
 
   try {
-    const { data } = await axios.get(
-      'https://api2-16-h2.musical.ly/aweme/v1/feed/',
-      {
-        headers: getHeaders(),
-        params: getParams(),
-      }
-    );
+    const {
+      data
+    } = await _axios.default.get('https://api2-16-h2.musical.ly/aweme/v1/feed/', {
+      headers: getHeaders(),
+      params: getParams()
+    });
     list = data.aweme_list;
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    _util.logger.error(error.message, () => process.exit(1));
   }
 
   isFirstRequest = false;
-
   return list;
 }
 
@@ -123,10 +134,7 @@ async function getTikTokVideoInfo() {
   const list = await getTikTokListOfVideos();
 
   for (const video of list) {
-    if (
-      isTikTokVideoPopular(video.statistics) &&
-      (await isTikTokVideoUnique(video.aweme_id))
-    ) {
+    if (isTikTokVideoPopular(video.statistics) && (await isTikTokVideoUnique(video.aweme_id))) {
       isFirstRequest = true;
       return video;
     }
@@ -137,11 +145,13 @@ async function getTikTokVideoInfo() {
 
 async function postTikTokVideoInfo(id) {
   try {
-    await db.connect();
-    const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
-    await cl.insertOne({ aweme_id: id });
+    await _db.default.connect();
+    const cl = await _db.default.getCollection('ig_meawira', 'tik_tok_video-ids');
+    await cl.insertOne({
+      aweme_id: id
+    });
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    _util.logger.error(error.message, () => process.exit(1));
   }
 }
 
@@ -150,11 +160,15 @@ async function downloadTikTokVideo(info) {
 
   try {
     const uri = info.video.play_addr_h264.url_list[0];
-    const { data } = await axios.get(uri, { responseType: 'stream' });
-    writer = fs.createWriteStream('tmp/input.mp4');
+    const {
+      data
+    } = await _axios.default.get(uri, {
+      responseType: 'stream'
+    });
+    writer = _fs.default.createWriteStream('tmp/input.mp4');
     data.pipe(writer);
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    _util.logger.error(error.message, () => process.exit(1));
   }
 
   return new Promise((resolve, reject) => {
@@ -163,4 +177,9 @@ async function downloadTikTokVideo(info) {
   });
 }
 
-export default { getTikTokVideoInfo, postTikTokVideoInfo, downloadTikTokVideo };
+var _default = {
+  getTikTokVideoInfo,
+  postTikTokVideoInfo,
+  downloadTikTokVideo
+};
+exports.default = _default;
