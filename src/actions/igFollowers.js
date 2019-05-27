@@ -2,7 +2,7 @@ import axios from 'axios';
 import db from '../db';
 import { logger } from '../util';
 
-async function getCurrentCountIGFollowers(igName) {
+async function getCurrentIGFollowersCount(igName) {
   let response;
   let count;
 
@@ -18,7 +18,7 @@ async function getCurrentCountIGFollowers(igName) {
   return count;
 }
 
-async function postCurrentCountIGFollowers(igName, count) {
+async function postCurrentIGFollowersCount(igName, count) {
   try {
     await db.connect();
     const cl = await db.getCollection(`ig_${igName}`, 'followers_count');
@@ -49,7 +49,7 @@ async function getListOfIGFollowersCounts(igName) {
 }
 
 export default {
-  getCurrentCountIGFollowers,
-  postCurrentCountIGFollowers,
+  getCurrentIGFollowersCount,
+  postCurrentIGFollowersCount,
   getListOfIGFollowersCounts,
 };

@@ -126,6 +126,7 @@ async function getTikTokVideoInfo() {
       isTikTokVideoPopular(video.statistics) &&
       (await isTikTokVideoUnique(video.aweme_id))
     ) {
+      isFirstRequest = true;
       return video;
     }
   }
