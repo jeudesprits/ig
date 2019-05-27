@@ -1,0 +1,7 @@
+{
+    "name": "jeudesprits/php_service",
+    "require": {
+    	"vlucas/phpdotenv": "dev-master",
+        "mgp25/instagram-php": "dev-master"
+    }
+}
