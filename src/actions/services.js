@@ -34,4 +34,4 @@ function uploadVideoToIG() {
   }
 }
 
-export { convertVideoToBoxWithBlur, uploadVideoToIG };
+export default { convertVideoToBoxWithBlur, uploadVideoToIG };
