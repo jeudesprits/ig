@@ -135,11 +135,12 @@ async function getTikTokVideoInfo() {
   return getTikTokVideoInfo();
 }
 
-async function postTikTokVideoInfo(id) {
+// eslint-disable-next-line camelcase
+async function postTikTokVideoInfo({ aweme_id }) {
   try {
     await db.connect();
     const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
-    await cl.insertOne({ aweme_id: id });
+    await cl.insertOne({ aweme_id });
   } catch (error) {
     logger.error(error.message, () => process.exit(1));
   }

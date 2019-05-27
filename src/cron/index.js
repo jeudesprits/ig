@@ -9,7 +9,7 @@ async function uploadVideoTask() {
   await tiktokVideos.downloadTikTokVideo(info);
   services.convertVideoToBoxWithBlur();
   services.uploadVideoToIG();
-  await tiktokVideos.postTikTokVideoInfo(info.aweme_id);
+  await tiktokVideos.postTikTokVideoInfo(info);
 }
 
 async function currentCountTask() {
