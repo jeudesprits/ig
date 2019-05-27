@@ -68,3 +68,6 @@ tmp
 
 # macOS 
 .DS_Store
+
+# Composer
+**/vendor
