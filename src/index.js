@@ -1,6 +1,5 @@
-import process from 'process';
-import { logger } from './util/index';
-import db from './db/db';
+import { logger } from './util';
+import db from './db';
 
 (async () => {
   await db.connect();
