@@ -21,7 +21,8 @@ async function currentCountTask() {
 }
 
 cron.schedule(
-  '0 5,6,7,10,11,13,15,18,20,21,22,23 * * MON-FRI',
+  // '0 5,6,7,10,11,13,15,18,20,21,22,23 * * MON-FRI',
+  '0 * * * MON-FRI',
   async () => {
     logger.info('Instagram upload video on MON-FRI task running');
 
