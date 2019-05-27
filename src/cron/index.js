@@ -12,6 +12,14 @@ async function uploadVideoTask() {
   await tiktokVideos.postTikTokVideoInfo(info.aweme_id);
 }
 
+async function currentCountTask() {
+  const mcount = await igFollowers.getCurrentIGFollowersCount('meawira');
+  await igFollowers.postCurrentIGFollowersCount('meawira', mcount);
+
+  const lcount = await igFollowers.getCurrentIGFollowersCount('lakrimoca');
+  await igFollowers.postCurrentIGFollowersCount('lakrimoca', lcount);
+}
+
 cron.schedule(
   '0 5,6,7,10,11,13,15,18,20,21,22,23 * * MON-FRI',
   async () => {
@@ -35,9 +43,5 @@ cron.schedule(
 cron.schedule('0 * * * *', async () => {
   logger.info('Instagram followers count cron task running');
 
-  const mcount = await igFollowers.getCurrentIGFollowersCount('meawira');
-  await igFollowers.postCurrentIGFollowersCount('meawira', mcount);
-
-  const lcount = await igFollowers.getCurrentIGFollowersCount('lakrimoca');
-  await igFollowers.postCurrentIGFollowersCount('lakrimoca', lcount);
+  await currentCountTask();
 });
