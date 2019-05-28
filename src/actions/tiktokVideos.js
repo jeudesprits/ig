@@ -11,13 +11,14 @@ function isTikTokVideoPopular({ comment_count, digg_count }) {
   return comment_count >= 20 && digg_count >= 10000;
 }
 
-async function isTikTokVideoUnique(id) {
+// eslint-disable-next-line camelcase
+async function isTikTokVideoUnique({ aweme_id }) {
   let document;
 
   try {
     await db.connect();
     const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
-    document = await cl.findOne({ aweme_id: id });
+    document = await cl.findOne({ aweme_id });
   } catch (error) {
     logger.error(error.message, () => process.exit(1));
   }
@@ -125,7 +126,7 @@ async function getTikTokVideoInfo() {
   for (const video of list) {
     if (
       isTikTokVideoPopular(video.statistics) &&
-      (await isTikTokVideoUnique(video.aweme_id))
+      (await isTikTokVideoUnique(video.statistics))
     ) {
       isFirstRequest = true;
       return video;
