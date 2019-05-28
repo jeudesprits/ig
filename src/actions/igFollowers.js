@@ -3,14 +3,15 @@ import db from '../db';
 import { logger } from '../utils';
 
 async function getCurrentIGFollowersCount(igName) {
-  let response;
   let count;
 
   try {
-    response = await axios.get(`https://www.instagram.com/${igName}/?__a=1`);
+    const { data } = await axios.get(
+      `https://www.instagram.com/${igName}/?__a=1`
+    );
 
     // eslint-disable-next-line prefer-destructuring
-    count = response.data.graphql.user.edge_followed_by.count;
+    count = data.graphql.user.edge_followed_by.count;
   } catch (error) {
     logger.error(error.message, () => process.exit(1));
   }
