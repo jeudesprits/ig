@@ -8,7 +8,7 @@ import secrets from './secrets';
 const logger = new createLogger({
   level: isProduction ? 'info' : 'debug',
   format: format.combine(
-    format.label({ label: path.basename(__filename) }),
+    format.label({ label: '👿🤒😾🙀😑' }),
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' })
   ),
 });
