@@ -1,6 +1,5 @@
 import { createLogger, transports, format } from 'winston-callback';
 import TelegramLogger from 'winston-telegram';
-import path from 'path';
 import isProduction from './isProd';
 import secrets from './secrets';
 
