@@ -3,6 +3,10 @@ set_time_limit(0);
 date_default_timezone_set('UTC');
 
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/logger/logger.php';
+
+// Logger
+$logger = new Logger();
 
 // Load .env variables
 $dotenv = Dotenv\Dotenv::create(__DIR__ . '/..');
@@ -13,7 +17,7 @@ $hashtagsJson = file_get_contents(__DIR__ . '/../hashtags.json');
 $hashtags = json_decode($hashtagsJson, true);
 $captionText = 'Share and Enjoy!' . "\n\n";
 $captionText .= $argv[2] . "\n\n";
-foreach($hashtags['uzb-v1'] as $hashtag) {
+foreach ($hashtags['uzb-v1'] as $hashtag) {
   $captionText .= $hashtag . ' ';
 }
 
@@ -24,7 +28,7 @@ $ig = new \InstagramAPI\Instagram();
 try {
   $ig->login($_ENV['IG_USERNAME'], $_ENV['IG_PASSWORD']);
 } catch (\Exception $e) {
-  echo $e->getMessage();
+  $logger->error($e->getMessage());
   exit(1);
 }
 
@@ -33,6 +37,6 @@ try {
   $video = new \InstagramAPI\Media\Video\InstagramVideo($argv[4], ['forceAspectRatio' => 1.0]);
   $ig->timeline->uploadVideo($video->getFile(), ['caption' => $captionText]);
 } catch (\Exception $e) {
-  echo $e->getMessage();
+  $logger->error($e->getMessage());
   exit(1);
 }
