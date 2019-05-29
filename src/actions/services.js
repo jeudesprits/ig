@@ -27,7 +27,7 @@ function convertVideoToBoxWithBlur() {
 function uploadVideoToIG() {
   try {
     execSync(
-      `php php_service/index.php --title ' ' --path '${process.cwd()}/tmp/output.mp4'`
+      `php php_service/upload.php --title ' ' --path '${process.cwd()}/tmp/output.mp4'`
     );
   } catch (error) {
     logger.error(error.message, () => process.exit(1));
