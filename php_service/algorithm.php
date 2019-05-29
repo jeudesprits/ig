@@ -17,7 +17,7 @@ $profilesJson = file_get_contents(__DIR__ . '/../profiles.json');
 $profiles = json_decode($hashtagsJson, true);
 
 // MongoDB client
-$client = new \MongoDB\Client($_ENV['MONGO_URI']);
+$client = new MongoDB\Client($_ENV['MONGO_URI']);
 
 // MongoDB collections
 $visitedPostsCl = $client->ig_lakrimoca->visited_posts;
