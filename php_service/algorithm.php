@@ -16,6 +16,13 @@ $dotenv->overload();
 $profilesJson = file_get_contents(__DIR__ . '/../profiles.json');
 $profiles = json_decode($hashtagsJson, true);
 
+// MongoDB client
+$client = new \MongoDB\Client($_ENV['MONGO_URI']);
+
+// MongoDB collections
+$visitedPostsCl = $client->ig_lakrimoca->visited_posts;
+$followingsCl = $client->ig_lakrimoca->followings;
+
 // Load IG client
 $ig = new \InstagramAPI\Instagram();
 
@@ -27,23 +34,26 @@ try {
   exit(1);
 }
 
-// Trying get comments
+// Trying algorithm
 try {
-  $userId = $ig->people->getUserIdForName('loganpaul');
+  $userId = $ig->people->getUserIdForName('sosanimal.uz');
   $posts =  $ig->timeline->getUserFeed($userId)->getItems();
+
   foreach ($posts as $post) {
     $postId = $post->getId();
-    echo $postId . "\n\n";
 
-    $prevMinId = NULL;
+    $document = $visitedPostsCl->findOne([
+      'post_id' => $postId,
+    ]);
+    $prevMinId = $document !== NULL ? $document['cursor'] : NULL;
+    $updateFlag = $document !== NULL;
+    $mediaCommentsResponse = $document !== NULL
+      ? $ig->media->getComments($postId, [
+        "max_id" => $prevMinId,
+      ])
+      : $ig->media->getComments($postId);
+
     do {
-      $mediaCommentsResponse;
-      if ($prevMinId === NULL) {
-        $mediaCommentsResponse = $ig->media->getComments($postId);
-      } else {
-        $mediaCommentsResponse = $ig->media->getComments($postId, ["min_id" => $prevMinId]);
-      }
-
       $minId = $mediaCommentsResponse->getNextMinId();
 
       if ($minId !== NULL && $prevMinId === $minId) {
@@ -51,7 +61,20 @@ try {
       }
       $prevMinId = $minId;
 
+      if ($prevMinId !== NULL && !$updateFlag) {
+        $visitedPostsCl->insertOne([
+          'post_id' => $postId,
+          'cursor' => $prevMinId,
+        ]);
+      } else if ($prevMinId !== NULL && $updateFlag) {
+        $visitedPostsCl->updateOne([
+          ['post_id' => $postId],
+          ['$set' => ['cursor' => $prevMinId]],
+        ]);
+      }
+
       $comments = $mediaCommentsResponse->getComments();
+
       foreach ($comments as $comment) {
         $commentUserId = $comment->getUserId();
 
@@ -63,22 +86,22 @@ try {
         }
 
         $friendshipResponse = $ig->people->follow($commentUserId);
-        echo $friendshipResponse->getStatus() . "\n";
+
+        $followingsCl->insertOne([
+          'user_id' => $commentUserId,
+          'created_at' => time(),
+        ]);
 
         sleep(5);
       }
+
+      if ($prevMinId !== NULL) {
+        $mediaCommentsResponse = $ig->media->getComments($postId, [
+          "min_id" => $prevMinId,
+        ]);
+      }
     } while ($prevMinId !== NULL);
-
-    echo "\n";
   }
-  //$minid = '{"cached_comments_cursor": "17856526684406117", "bifilter_token": "KGIBFACQAEAAKAAgABgAGAAQAAgACAAIAOar6_99-1yf6-vX3_tvQ873-KxBt8iRL3-PeDo1MIldxYjDCO"}';
-  // next
-  //$comments = $ig->media->getComments($postId, ["min_id" => $minid]);
-
-  // prev
-  //$comments = $ig->media->getComments($postId, ["max_id" => $minid]);
-
-
   //Encode the array into a JSON string.
   //$encodedString = json_encode($comments);
   //Save the JSON string to a text file.
