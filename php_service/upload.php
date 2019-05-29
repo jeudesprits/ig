@@ -26,7 +26,7 @@ $ig = new \InstagramAPI\Instagram();
 
 // Trying IG login
 try {
-  $ig->login($_ENV['IG_USERNAME'], $_ENV['IG_PASSWORD']);
+  $ig->login($_ENV['IG_MUSERNAME'], $_ENV['IG_MPASSWORD']);
 } catch (\Exception $e) {
   $logger->error($e->getMessage());
   exit(1);

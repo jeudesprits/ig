@@ -14,7 +14,7 @@ $dotenv->overload();
 
 // Get list of profiles
 $profilesJson = file_get_contents(__DIR__ . '/../profiles.json');
-$profiles = json_decode($hashtagsJson, true);
+$profiles = json_decode($profilesJson, true);
 
 // MongoDB client
 $client = new MongoDB\Client($_ENV['MONGO_URI']);
@@ -28,7 +28,7 @@ $ig = new \InstagramAPI\Instagram();
 
 // Trying IG login
 try {
-  $ig->login('jeudesprits', 'rj2119942104sl');
+  $ig->login($_ENV['IG_LUSERNAME'], $_ENV['IG_LPASSWORD']);
 } catch (\Exception $e) {
   $logger->error($e->getMessage());
   exit(1);
@@ -47,6 +47,7 @@ try {
     ]);
     $prevMinId = $document !== NULL ? $document['cursor'] : NULL;
     $updateFlag = $document !== NULL;
+    $isFirst = true;
     $mediaCommentsResponse = $document !== NULL
       ? $ig->media->getComments($postId, [
         "max_id" => $prevMinId,
@@ -61,12 +62,12 @@ try {
       }
       $prevMinId = $minId;
 
-      if ($prevMinId !== NULL && !$updateFlag) {
+      if ($isFirst && $prevMinId !== NULL && !$updateFlag) {
         $visitedPostsCl->insertOne([
           'post_id' => $postId,
           'cursor' => $prevMinId,
         ]);
-      } else if ($prevMinId !== NULL && $updateFlag) {
+      } else if ($isFirst && $prevMinId !== NULL && $updateFlag) {
         $visitedPostsCl->updateOne([
           ['post_id' => $postId],
           ['$set' => ['cursor' => $prevMinId]],
@@ -89,7 +90,7 @@ try {
 
         $followingsCl->insertOne([
           'user_id' => $commentUserId,
-          'created_at' => time(),
+          'created_at' => date(DateTime::ISO8601),
         ]);
 
         sleep(5);
@@ -100,6 +101,8 @@ try {
           "min_id" => $prevMinId,
         ]);
       }
+
+      $isFirst = false;
     } while ($prevMinId !== NULL);
   }
   //Encode the array into a JSON string.

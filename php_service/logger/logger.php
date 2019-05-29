@@ -14,7 +14,7 @@ class Logger
 
     $json_array = [
       'parse_mode' => 'Markdown',
-      'disable_notification' => 'true',
+      'disable_notification' => true,
       'chat_id' => $_ENV['TG_CHANNEL_NAME'],
       'text' => '``` ' . ($isError ? 'error' : 'info') . ' [PHP 👿🤒😾🙀😑]: ' . $message . ' ```'
     ];
