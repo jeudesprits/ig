@@ -49,7 +49,7 @@ try {
     $cursor = $document !== NULL ? $document['cursor'] : NULL;
     $mediaCommentsResponse = $document !== NULL
       ? $ig->media->getComments($postId, [
-        "max_id" => $prevMinId,
+        "max_id" => $cursor,
       ])
       : $ig->media->getComments($postId);
     $initialOnPost = $document === NULL;
