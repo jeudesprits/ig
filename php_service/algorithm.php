@@ -29,11 +29,12 @@ $ig = new \InstagramAPI\Instagram();
 // Trying IG login
 try {
   $loginResponse = $ig->login($_ENV['IG_LUSERNAME'], $_ENV['IG_LPASSWORD']);
-  if ($loginResponse !== null && $loginResponse->isTwoFactorRequired()) {
+  if ($loginResponse !== NULL && $loginResponse->isTwoFactorRequired()) {
     $twoFactorIdentifier = $loginResponse->getTwoFactorInfo()->getTwoFactorIdentifier();
     // The "STDIN" lets you paste the code via terminal for testing.
     // You should replace this line with the logic you want.
     // The verification code will be sent by Instagram via SMS.
+    echo 'Write verification code: ';
     $verificationCode = trim(fgets(STDIN));
     $ig->finishTwoFactorLogin($username, $password, $twoFactorIdentifier, $verificationCode);
   }
