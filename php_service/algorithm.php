@@ -36,11 +36,12 @@ try {
 
 // Trying algorithm
 try {
-  $userId = $ig->people->getUserIdForName('leo_17s');
-  $posts__ =  $ig->timeline->getUserFeed($userId)->getItems();
-  $posts = [$posts__[0]];
 
-  foreach ($posts as $post) {
+  $followingCount = 0;
+  foreach ($profiles as $profile) {
+    $userId = $ig->people->getUserIdForName($profile);
+    $posts =  $ig->timeline->getUserFeed($userId)->getItems();
+    $post = $posts[0];
     $postId = $post->getId();
 
     $document = $visitedPostsCl->findOne([
@@ -73,6 +74,10 @@ try {
         }
 
         $friendshipResponse = $ig->people->follow($commentUserId);
+
+        if (++$followingCount > $_ENV['IG_FOLLOW_LIMIT=']) {
+          break 3;
+        }
 
         $followingsCl->insertOne([
           'user_id' => $commentUserId,
