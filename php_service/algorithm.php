@@ -46,41 +46,21 @@ try {
     $document = $visitedPostsCl->findOne([
       'post_id' => $postId,
     ]);
-    $prevMinId = $document !== NULL ? $document['cursor'] : NULL;
-    $updateFlag = $document !== NULL;
-    $isFirst = true;
+    $cursor = $document !== NULL ? $document['cursor'] : NULL;
     $mediaCommentsResponse = $document !== NULL
       ? $ig->media->getComments($postId, [
         "max_id" => $prevMinId,
       ])
       : $ig->media->getComments($postId);
+    $initialOnPost = $document === NULL;
+    $isFirstStep = true;
+    $comments = $mediaCommentsResponse->getComments();
 
     do {
-      $minId = $mediaCommentsResponse->getNextMinId();
-
-      if ($minId !== NULL && $prevMinId === $minId) {
-        break;
-      }
-      $prevMinId = $minId;
-
-      if ($isFirst && $prevMinId !== NULL && !$updateFlag) {
-        $visitedPostsCl->insertOne([
-          'post_id' => $postId,
-          'cursor' => $prevMinId,
-        ]);
-      } else if ($isFirst && $prevMinId !== NULL && $updateFlag) {
-        $visitedPostsCl->updateOne(
-          ['post_id' => $postId],
-          ['$set' => ['cursor' => $prevMinId]]
-        );
-      }
-
-      $comments = $mediaCommentsResponse->getComments();
-
       // Encode the array into a JSON string.
       $encodedString = json_encode($comments);
       // Save the JSON string to a text file.
-      file_put_contents('response.json', $encodedString, FILE_APPEND);
+      file_put_contents('response.json', $encodedString . "\n\n", FILE_APPEND);
 
       foreach ($comments as $comment) {
         $commentUserId = $comment->getUserId();
@@ -102,14 +82,40 @@ try {
         sleep(5);
       }
 
-      if ($prevMinId !== NULL) {
-        $mediaCommentsResponse = $ig->media->getComments($postId, [
-          "min_id" => $prevMinId,
-        ]);
+      $newCursor = $mediaCommentsResponse->getNextMinId();
+
+      if ($newCursor !== NULL) {
+        $mediaCommentsResponse = $initialOnPost
+          ? $ig->media->getComments($postId, [
+            "min_id" => $newCursor,
+          ])
+          : $ig->media->getComments($postId, [
+            "max_id" => $newCursor,
+          ]);
+        $comments = $mediaCommentsResponse->getComments();
+
+        if ($isFirstStep) {
+          if ($cursor === NULL) {
+            $visitedPostsCl->insertOne([
+              'post_id' => $postId,
+              'cursor' => $newCursor,
+            ]);
+          } else {
+            $visitedPostsCl->updateOne(
+              ['post_id' => $postId],
+              ['$set' => ['cursor' => $newCursor]]
+            );
+          }
+          $isFirstStep = false;
+        }
       }
 
-      $isFirst = false;
-    } while ($prevMinId !== NULL);
+      if ($newCursor === $cursor) {
+        break;
+      } else {
+        $cursor = $newCursor;
+      }
+    } while (true);
   }
 } catch (\Exception $e) {
   $logger->error($e->getMessage());
