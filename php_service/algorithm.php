@@ -36,8 +36,8 @@ try {
 
 // Trying algorithm
 try {
+  $followingsCount = 0;
 
-  $followingCount = 0;
   foreach ($profiles as $profile) {
     $userId = $ig->people->getUserIdForName($profile);
     $posts =  $ig->timeline->getUserFeed($userId)->getItems();
@@ -75,14 +75,14 @@ try {
 
         $friendshipResponse = $ig->people->follow($commentUserId);
 
-        if (++$followingCount > $_ENV['IG_FOLLOW_LIMIT=']) {
-          break 3;
-        }
-
         $followingsCl->insertOne([
           'user_id' => $commentUserId,
           'created_at' => date(DateTime::ISO8601),
         ]);
+
+        if (++$followingsCount > $_ENV['IG_FOLLOW_LIMIT=']) {
+          break 3;
+        }
 
         sleep(5);
       }
