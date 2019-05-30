@@ -58,11 +58,6 @@ try {
     $comments = $mediaCommentsResponse->getComments();
 
     do {
-      // Encode the array into a JSON string.
-      $encodedString = json_encode($comments);
-      // Save the JSON string to a text file.
-      file_put_contents('response.json', $encodedString . "\n\n", FILE_APPEND);
-
       foreach ($comments as $comment) {
         $commentUserId = $comment->getUserId();
 
@@ -74,6 +69,11 @@ try {
         }
 
         $friendshipResponse = $ig->people->follow($commentUserId);
+
+        // Encode the array into a JSON string.
+        $encodedString = json_encode($friendshipResponse);
+        // Save the JSON string to a text file.
+        file_put_contents('response.json', $encodedString . "\n", FILE_APPEND);
 
         $followingsCl->insertOne([
           'user_id' => $commentUserId,
