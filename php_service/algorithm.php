@@ -36,8 +36,9 @@ try {
 
 // Trying algorithm
 try {
-  $userId = $ig->people->getUserIdForName('sosanimal.uz');
-  $posts =  $ig->timeline->getUserFeed($userId)->getItems();
+  $userId = $ig->people->getUserIdForName('leo_17s');
+  $posts__ =  $ig->timeline->getUserFeed($userId)->getItems();
+  $posts = [$posts__[0]];
 
   foreach ($posts as $post) {
     $postId = $post->getId();
@@ -68,13 +69,18 @@ try {
           'cursor' => $prevMinId,
         ]);
       } else if ($isFirst && $prevMinId !== NULL && $updateFlag) {
-        $visitedPostsCl->updateOne([
+        $visitedPostsCl->updateOne(
           ['post_id' => $postId],
-          ['$set' => ['cursor' => $prevMinId]],
-        ]);
+          ['$set' => ['cursor' => $prevMinId]]
+        );
       }
 
       $comments = $mediaCommentsResponse->getComments();
+
+      // Encode the array into a JSON string.
+      $encodedString = json_encode($comments);
+      // Save the JSON string to a text file.
+      file_put_contents('response.json', $encodedString, FILE_APPEND);
 
       foreach ($comments as $comment) {
         $commentUserId = $comment->getUserId();
@@ -105,10 +111,6 @@ try {
       $isFirst = false;
     } while ($prevMinId !== NULL);
   }
-  //Encode the array into a JSON string.
-  //$encodedString = json_encode($comments);
-  //Save the JSON string to a text file.
-  //file_put_contents('response.json', $encodedString);
 } catch (\Exception $e) {
   $logger->error($e->getMessage());
   exit(1);
