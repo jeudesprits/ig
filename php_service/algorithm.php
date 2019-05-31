@@ -63,14 +63,14 @@ try {
 
         $friendshipsShowResponse = $ig->people->getFriendship($commentUserId);
         $isFollowing = $friendshipsShowResponse->getFollowing();
+        $isOutgoingRequest = $friendshipsShowResponse->isOutgoingRequest();
 
-        $friendshipsShowResponse->printJson(true);
-
-        if ($isFollowing) {
+        if ($isFollowing || $isOutgoingRequest) {
           continue;
         }
 
         $friendshipResponse = $ig->people->follow($commentUserId);
+        $friendshipResponse->printJson(true);
 
         // Encode the array into a JSON string.
         $encodedString = json_encode($friendshipResponse);
