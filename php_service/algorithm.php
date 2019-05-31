@@ -64,6 +64,8 @@ try {
         $friendshipsShowResponse = $ig->people->getFriendship($commentUserId);
         $isFollowing = $friendshipsShowResponse->getFollowing();
 
+        $friendshipsShowResponse->printJson(true);
+
         if ($isFollowing) {
           continue;
         }
@@ -80,7 +82,7 @@ try {
           'created_at' => date(DateTime::ISO8601),
         ]);
 
-        if (++$followingsCount > $_ENV['IG_FOLLOW_LIMIT=']) {
+        if (++$followingsCount > $_ENV['IG_FOLLOW_LIMIT']) {
           break 3;
         }
 
