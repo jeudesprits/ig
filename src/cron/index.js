@@ -20,9 +20,12 @@ async function currentCountTask() {
   await igFollowers.postCurrentIGFollowersCount('lakrimoca', lcount);
 }
 
+function followingTask() {
+  services.followingAlgorithm();
+}
+
 cron.schedule(
-  // '0 5,6,7,10,11,13,15,18,20,21,22,23 * * MON-FRI',
-  '0 * * * MON-FRI',
+  '0 6,7,9,10,11,16,20,21,22,23 * * MON-FRI',
   async () => {
     logger.info('Instagram upload video on MON-FRI cron task running');
 
@@ -32,7 +35,7 @@ cron.schedule(
 );
 
 cron.schedule(
-  '0 9,10,11,12,13,14,18,20,21,22,23 * * SAT,SUN',
+  '0 9,10,12,13,14,18,20,21,22,23 * * SAT,SUN',
   async () => {
     logger.info('Instagram upload video on SAT-SUN cron task running');
 
@@ -45,4 +48,10 @@ cron.schedule('0 * * * *', async () => {
   logger.info('Instagram followers count cron task running');
 
   await currentCountTask();
+});
+
+cron.schedule('0 * * * *', () => {
+  logger.info('Instagram following algorithm cron task running');
+
+  followingTask();
 });

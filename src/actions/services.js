@@ -34,4 +34,16 @@ function uploadVideoToIG() {
   }
 }
 
-export default { convertVideoToBoxWithBlur, uploadVideoToIG };
+function followingAlgorithm() {
+  try {
+    execSync('php php_service/algorithm.php');
+  } catch (error) {
+    logger.error(error.message, () => process.exit(1));
+  }
+}
+
+export default {
+  convertVideoToBoxWithBlur,
+  uploadVideoToIG,
+  followingAlgorithm,
+};
