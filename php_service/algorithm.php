@@ -77,7 +77,7 @@ try {
         // Encode the array into a JSON string.
         $encodedString = json_encode($friendshipResponse);
         // Save the JSON string to a text file.
-        file_put_contents('response.json', $encodedString . "\n", FILE_APPEND);
+        file_put_contents(__DIR__ . '/response.json', $encodedString . "\n", FILE_APPEND);
 
         $followingsCl->insertOne([
           'user_id' => $commentUserId,
