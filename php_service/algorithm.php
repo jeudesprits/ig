@@ -66,9 +66,10 @@ try {
         $isOutgoingRequest = $friendshipsShowResponse->isOutgoingRequest();
 
         if ($isFollowing || $isOutgoingRequest) {
-          echo $isFollowing . ' ' . $isOutgoingRequest;
           continue;
         }
+
+        echo $isFollowing . ' ' . $isOutgoingRequest . "\n";
 
         $friendshipResponse = $ig->people->follow($commentUserId);
         $friendshipResponse->printJson(true);
