@@ -69,10 +69,7 @@ try {
           continue;
         }
 
-        echo $isFollowing . ' ' . $isOutgoingRequest . "\n";
-
         $friendshipResponse = $ig->people->follow($commentUserId);
-        $friendshipResponse->printJson(true);
 
         // Encode the array into a JSON string.
         $encodedString = json_encode($friendshipResponse);
