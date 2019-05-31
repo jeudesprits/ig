@@ -65,6 +65,7 @@ try {
         $isFollowing = $friendshipsShowResponse->getFollowing();
         $isOutgoingRequest = $friendshipsShowResponse->isOutgoingRequest();
 
+        echo $isFollowing, $isOutgoingRequest;
         if ($isFollowing || $isOutgoingRequest) {
           continue;
         }
