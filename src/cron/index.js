@@ -7,8 +7,8 @@ const timezone = 'Asia/Tashkent';
 async function uploadVideoTask() {
   const info = await tiktokVideos.getTikTokVideoInfo();
   await tiktokVideos.downloadTikTokVideo(info);
-  services.convertVideoToBoxWithBlur();
-  services.uploadVideoToIG();
+  await services.convertVideoToBoxWithBlur();
+  await services.uploadVideoToIG();
   await tiktokVideos.postTikTokVideoInfo(info);
 }
 
@@ -21,7 +21,7 @@ async function currentCountTask() {
 }
 
 async function followingTask() {
-  services.followingAlgorithm();
+  await services.followingAlgorithm();
 }
 
 cron.schedule(
