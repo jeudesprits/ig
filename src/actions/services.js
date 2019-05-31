@@ -11,7 +11,7 @@ function convertVideoToBoxWithBlur() {
       'ffmpeg -y -i "tmp/container.mp4" -vf gblur=sigma=20 "tmp/blurred.mp4"'
     );
     execSync(
-      `ffmpeg -y -i "tmp/input.mp4" -filter_complex "[0:v]scale='if(lt(in_h,in_w),1080,-1)':'if(lt(in_w,in_h),1080,-1)'" "tmp/content.mp4"`
+      `ffmpeg -y -i "tmp/input.mp4" -filter_complex "[0:v]scale='if(lte(in_h,in_w),1080,-1)':'if(lt(in_w,in_h),1080,-1)'" "tmp/content.mp4"`
     );
     execSync(
       'ffmpeg -y -i "tmp/container.mp4" -i "tmp/blurred.mp4" -filter_complex "[0:v][1:v]overlay=0:0" "tmp/mix.mp4"'
