@@ -29,6 +29,7 @@ $ig = new \InstagramAPI\Instagram();
 // Trying IG login
 try {
   $ig->login($_ENV['IG_LUSERNAME'], $_ENV['IG_LPASSWORD']);
+  sleep(5);
 } catch (\Exception $e) {
   $logger->error($e->getMessage());
   exit(1);
@@ -41,6 +42,7 @@ try {
   foreach ($profiles as $profile) {
     $userId = $ig->people->getUserIdForName($profile);
     $posts =  $ig->timeline->getUserFeed($userId)->getItems();
+    sleep(5);
     $post = $posts[0];
     $postId = $post->getId();
 
@@ -60,11 +62,12 @@ try {
     do {
       foreach ($comments as $comment) {
         $commentUserId = $comment->getUserId();
-
+        sleep(5);
         $friendshipsShowResponse = $ig->people->getFriendship($commentUserId);
         $isFollowing = $friendshipsShowResponse->getFollowing();
         $isOutgoingRequest = $friendshipsShowResponse->isOutgoingRequest();
 
+        sleep(5);
         if ($isFollowing || $isOutgoingRequest) {
           continue;
         }
@@ -91,6 +94,7 @@ try {
       $newCursor = $mediaCommentsResponse->getNextMinId();
 
       if ($newCursor !== NULL) {
+        sleep(5);
         $mediaCommentsResponse = $initialOnPost
           ? $ig->media->getComments($postId, [
             "min_id" => $newCursor,
@@ -117,8 +121,10 @@ try {
       }
 
       if ($newCursor === $cursor) {
+        sleep(5);
         break;
       } else {
+        sleep(5);
         $cursor = $newCursor;
       }
     } while (true);

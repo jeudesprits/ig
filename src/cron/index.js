@@ -7,8 +7,8 @@ const timezone = 'Asia/Tashkent';
 async function uploadVideoTask() {
   const info = await tiktokVideos.getTikTokVideoInfo();
   await tiktokVideos.downloadTikTokVideo(info);
-  services.convertVideoToBoxWithBlur();
-  services.uploadVideoToIG();
+  await services.convertVideoToBoxWithBlur();
+  await services.uploadVideoToIG();
   await tiktokVideos.postTikTokVideoInfo(info);
 }
 
@@ -20,14 +20,14 @@ async function currentCountTask() {
   await igFollowers.postCurrentIGFollowersCount('lakrimoca', lcount);
 }
 
-function followingTask() {
-  services.followingAlgorithm();
+async function followingTask() {
+  await services.followingAlgorithm();
 }
 
 cron.schedule(
   '0 6,7,9,10,11,16,20,21,22,23 * * MON-FRI',
   async () => {
-    logger.info('Instagram upload video on MON-FRI cron task running');
+    logger.info('Instagram upload video on MON-FRI cron task running...');
 
     await uploadVideoTask();
   },
@@ -37,7 +37,7 @@ cron.schedule(
 cron.schedule(
   '0 9,10,12,13,14,18,20,21,22,23 * * SAT,SUN',
   async () => {
-    logger.info('Instagram upload video on SAT-SUN cron task running');
+    logger.info('Instagram upload video on SAT-SUN cron task running...');
 
     await uploadVideoTask();
   },
@@ -45,13 +45,13 @@ cron.schedule(
 );
 
 cron.schedule('0 * * * *', async () => {
-  logger.info('Instagram followers count cron task running');
+  logger.info('Instagram followers count cron task running...');
 
   await currentCountTask();
 });
 
-cron.schedule('0 * * * *', () => {
-  logger.info('Instagram following algorithm cron task running');
+cron.schedule('0 * * * *', async () => {
+  logger.info('Instagram following algorithm cron task running...');
 
-  followingTask();
+  await followingTask();
 });
