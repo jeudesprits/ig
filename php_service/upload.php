@@ -17,7 +17,7 @@ $hashtagsJson = file_get_contents(__DIR__ . '/../hashtags.json');
 $hashtags = json_decode($hashtagsJson, true);
 $captionText = 'Share and Enjoy!' . "\n\n";
 $captionText .= $argv[2] . "\n\n";
-foreach ($hashtags['uzb-v1'] as $hashtag) {
+foreach ($hashtags['vine'] as $hashtag) {
   $captionText .= $hashtag . ' ';
 }
 
