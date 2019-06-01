@@ -84,7 +84,7 @@ try {
           'created_at' => date(DateTime::ISO8601),
         ]);
 
-        if (++$followingsCount > $_ENV['IG_FOLLOW_LIMIT']) {
+        if (++$followingsCount >= $_ENV['IG_FOLLOW_LIMIT']) {
           break 3;
         }
 
