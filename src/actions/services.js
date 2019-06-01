@@ -1,13 +1,10 @@
-import { spawn } from 'child_process';
+import spawn from 'await-spawn';
 import process from 'process';
-import { promisify } from 'util';
 import { logger } from '../utils';
-
-const spawnAsync = promisify(spawn);
 
 async function convertVideoToBoxWithBlur() {
   try {
-    await spawnAsync('ffmpeg', [
+    await spawn('ffmpeg', [
       '-y',
       '-i',
       'tmp/input.mp4',
@@ -15,7 +12,7 @@ async function convertVideoToBoxWithBlur() {
       'scale=1080:1080',
       'tmp/container.mp4',
     ]);
-    await spawnAsync('ffmpeg', [
+    await spawn('ffmpeg', [
       '-y',
       '-i',
       'tmp/container.mp4',
@@ -23,7 +20,7 @@ async function convertVideoToBoxWithBlur() {
       'gblur=sigma=20',
       'tmp/blurred.mp4',
     ]);
-    await spawnAsync('ffmpeg', [
+    await spawn('ffmpeg', [
       '-y',
       '-i',
       'tmp/input.mp4',
@@ -31,7 +28,7 @@ async function convertVideoToBoxWithBlur() {
       "[0:v]scale='if(lte(in_h,in_w),1080,-1)':'if(lt(in_w,in_h),1080,-1)'",
       'tmp/content.mp4',
     ]);
-    await spawnAsync('ffmpeg', [
+    await spawn('ffmpeg', [
       '-y',
       '-i',
       'tmp/container.mp4',
@@ -41,7 +38,7 @@ async function convertVideoToBoxWithBlur() {
       '[0:v][1:v]overlay=0:0',
       'tmp/mix.mp4',
     ]);
-    await spawnAsync('ffmpeg', [
+    await spawn('ffmpeg', [
       '-y',
       '-i',
       'tmp/mix.mp4',
@@ -58,7 +55,7 @@ async function convertVideoToBoxWithBlur() {
 
 async function uploadVideoToIG() {
   try {
-    await spawnAsync('php', [
+    await spawn('php', [
       'php_service/upload.php',
       '--title',
       ' ',
@@ -72,7 +69,7 @@ async function uploadVideoToIG() {
 
 async function followingAlgorithm() {
   try {
-    await spawnAsync('php', ['php_service/algorithm.php']);
+    await spawn('php', ['php_service/algorithm.php']);
   } catch (error) {
     logger.error(error.message, () => process.exit(1));
   }
