@@ -16,7 +16,7 @@
     "url": "https://github.com/jeudesprits/ig.git"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "cors": "^2.8.5",
     "dotenv-safe": "^6.1.0",
     "express": "^4.17.1",
