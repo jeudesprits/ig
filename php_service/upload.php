@@ -28,7 +28,7 @@ $ig = new \InstagramAPI\Instagram();
 try {
   $ig->login($_ENV['IG_MUSERNAME'], $_ENV['IG_MPASSWORD']);
 } catch (\Exception $e) {
-  $logger->error($e->getMessage());
+  $logger->error($e->getMessage() . ' (' . __LINE__ . ' ' . __FILE__ . ')');
   exit(1);
 }
 
@@ -37,6 +37,6 @@ try {
   $video = new \InstagramAPI\Media\Video\InstagramVideo($argv[4], ['forceAspectRatio' => 1.0]);
   $ig->timeline->uploadVideo($video->getFile(), ['caption' => $captionText]);
 } catch (\Exception $e) {
-  $logger->error($e->getMessage());
+  $logger->error($e->getMessage() . ' (' . __LINE__ . ' ' . __FILE__ . ')');
   exit(1);
 }

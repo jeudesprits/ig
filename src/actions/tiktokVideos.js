@@ -1,6 +1,6 @@
 import axios from 'axios';
 import fs from 'fs';
-import { logger } from '../utils';
+import { logger, __line } from '../utils';
 import db from '../db';
 
 let isFirstRequest = true;
@@ -20,7 +20,9 @@ async function isTikTokVideoUnique({ aweme_id }) {
     const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
     document = await cl.findOne({ aweme_id });
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 
   return document === null;
@@ -112,7 +114,9 @@ async function getTikTokListOfVideos() {
     );
     list = data.aweme_list;
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 
   isFirstRequest = false;
@@ -143,7 +147,9 @@ async function postTikTokVideoInfo({ aweme_id }) {
     const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
     await cl.insertOne({ aweme_id });
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 }
 
@@ -156,7 +162,9 @@ async function downloadTikTokVideo(info) {
     writer = fs.createWriteStream('tmp/input.mp4');
     data.pipe(writer);
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 
   return new Promise((resolve, reject) => {

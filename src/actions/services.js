@@ -1,6 +1,6 @@
 import spawn from 'await-spawn';
 import process from 'process';
-import { logger } from '../utils';
+import { logger, __line } from '../utils';
 
 async function convertVideoToBoxWithBlur() {
   try {
@@ -49,7 +49,9 @@ async function convertVideoToBoxWithBlur() {
       'tmp/output.mp4',
     ]);
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 }
 
@@ -63,7 +65,9 @@ async function uploadVideoToIG() {
       `${process.cwd()}/tmp/output.mp4`,
     ]);
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 }
 
@@ -71,7 +75,9 @@ async function followingAlgorithm() {
   try {
     await spawn('php', ['php_service/algorithm.php']);
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 }
 

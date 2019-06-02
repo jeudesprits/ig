@@ -1,6 +1,6 @@
 import axios from 'axios';
 import db from '../db';
-import { logger } from '../utils';
+import { logger, __line } from '../utils';
 
 async function getCurrentIGFollowersCount(igName) {
   let count;
@@ -13,7 +13,9 @@ async function getCurrentIGFollowersCount(igName) {
     // eslint-disable-next-line prefer-destructuring
     count = data.graphql.user.edge_followed_by.count;
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 
   return count;
@@ -28,7 +30,9 @@ async function postCurrentIGFollowersCount(igName, count) {
       created_at: new Date(),
     });
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 }
 
@@ -43,7 +47,9 @@ async function getListOfIGFollowersCounts(igName) {
       .project({ _id: 0 })
       .toArray();
   } catch (error) {
-    logger.error(error.message, () => process.exit(1));
+    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
+      process.exit(1)
+    );
   }
 
   return list;

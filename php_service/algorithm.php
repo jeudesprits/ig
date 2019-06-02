@@ -31,7 +31,7 @@ try {
   $ig->login($_ENV['IG_LUSERNAME'], $_ENV['IG_LPASSWORD']);
   sleep(5);
 } catch (\Exception $e) {
-  $logger->error($e->getMessage());
+  $logger->error($e->getMessage() . ' (' . __LINE__ . ' ' . __FILE__ . ')');
   exit(1);
 }
 
@@ -130,6 +130,6 @@ try {
     } while (true);
   }
 } catch (\Exception $e) {
-  $logger->error($e->getMessage());
+  $logger->error($e->getMessage() . ' (' . __LINE__ . ' ' . __FILE__ . ')');
   exit(1);
 }
