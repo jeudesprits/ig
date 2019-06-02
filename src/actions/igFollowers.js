@@ -13,9 +13,7 @@ async function getCurrentIGFollowersCount(igName) {
     // eslint-disable-next-line prefer-destructuring
     count = data.graphql.user.edge_followed_by.count;
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 
   return count;
@@ -30,9 +28,7 @@ async function postCurrentIGFollowersCount(igName, count) {
       created_at: new Date(),
     });
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 }
 
@@ -47,9 +43,7 @@ async function getListOfIGFollowersCounts(igName) {
       .project({ _id: 0 })
       .toArray();
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 
   return list;

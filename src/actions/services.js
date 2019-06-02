@@ -49,9 +49,7 @@ async function convertVideoToBoxWithBlur() {
       'tmp/output.mp4',
     ]);
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 }
 
@@ -65,9 +63,7 @@ async function uploadVideoToIG() {
       `${process.cwd()}/tmp/output.mp4`,
     ]);
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 }
 
@@ -75,9 +71,7 @@ async function followingAlgorithm() {
   try {
     await spawn('php', ['php_service/algorithm.php']);
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 }
 

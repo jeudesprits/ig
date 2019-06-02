@@ -20,9 +20,7 @@ async function isTikTokVideoUnique({ aweme_id }) {
     const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
     document = await cl.findOne({ aweme_id });
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 
   return document === null;
@@ -114,9 +112,7 @@ async function getTikTokListOfVideos() {
     );
     list = data.aweme_list;
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 
   isFirstRequest = false;
@@ -147,9 +143,7 @@ async function postTikTokVideoInfo({ aweme_id }) {
     const cl = await db.getCollection('ig_meawira', 'tik_tok_video-ids');
     await cl.insertOne({ aweme_id });
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 }
 
@@ -162,9 +156,7 @@ async function downloadTikTokVideo(info) {
     writer = fs.createWriteStream('tmp/input.mp4');
     data.pipe(writer);
   } catch (error) {
-    logger.error(`${error.message} (${__line(error)} ${__filename})`, () =>
-      process.exit(1)
-    );
+    logger.error(`${error.message} (${__line(error)} ${__filename})`);
   }
 
   return new Promise((resolve, reject) => {
