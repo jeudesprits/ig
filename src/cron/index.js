@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { logger } from '../utils';
 import { igFollowers, tiktokVideos, services } from '../actions';
 
-const timezone = 'Etc/Greenwic';
+const timezone = 'Etc/UTC';
 
 async function uploadVideoTask() {
   const info = await tiktokVideos.getTikTokVideoInfo();
