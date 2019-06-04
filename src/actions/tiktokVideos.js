@@ -1,6 +1,6 @@
 import axios from 'axios';
 import fs from 'fs';
-import { logger, __line } from '../utils';
+import { logger, sleep, __line } from '../utils';
 import db from '../db';
 
 let isFirstRequest = true;
@@ -131,6 +131,8 @@ async function getTikTokVideoInfo() {
       isFirstRequest = true;
       return video;
     }
+
+    await sleep(3000);
   }
 
   return getTikTokVideoInfo();

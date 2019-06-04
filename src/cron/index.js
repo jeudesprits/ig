@@ -50,8 +50,8 @@ cron.schedule('0 * * * *', () => {
   currentCountTask();
 });
 
-cron.schedule('0 * * * *', () => {
-  logger.info('Instagram following algorithm cron task running...');
+// cron.schedule('0 * * * *', () => {
+//   logger.info('Instagram following algorithm cron task running...');
 
-  followingTask();
-});
+//   followingTask();
+// });
