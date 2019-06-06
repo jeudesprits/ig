@@ -8,7 +8,7 @@ let isFirstRequest = true;
 // eslint-disable-next-line camelcase
 function isTikTokVideoPopular({ comment_count, digg_count }) {
   // eslint-disable-next-line camelcase
-  return comment_count >= 30 && digg_count >= 30000;
+  return comment_count >= 30 && digg_count >= 100000;
 }
 
 // eslint-disable-next-line camelcase
